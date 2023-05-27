@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" version="3.9" group="system" method="upgrade">
+    <name>System - Joomill Tag Manager</name>
+    <author>Jeroen Moolenschot | Joomill</author>
+    <creationDate>Mei 2023</creationDate>
+    <copyright>Copyright (C) 2023 Joomill. All rights reserved.</copyright>
+    <license>GPLv3 http://www.gnu.org/licenses/gpl.html</license>
+    <authorEmail>info@joomill.nl</authorEmail>
+    <authorUrl>https://www.joomill.nl</authorUrl>
+    <version>1.0.0</version>
+    <description>Joomill Tag Manager - System plugin to track visitors with Google analytics, Google Tag Manager or Matomo</description>
+    <scriptfile>script.php</scriptfile>
+    <files>
+        <filename plugin="tagmanager">tagmanager.php</filename>
+    </files>
+
+    <config>
+        <fields name="params" addfieldpath="/plugins/system">
+            <fieldset name="basic">
+                <field 
+                    name="gtm_id" 
+                    type="text" 
+                    default="" 
+                    label="Tag Manager ID"
+                    hint="GTM-XXXX"
+                    description="Enter your GTM Container Public ID (GTM-XXXX)"
+                />
+                <field 
+                    name="ga_id" 
+                    type="text" 
+                    default="" 
+                    label="Google Analytics 4 ID"
+                    hint="G-XXXX"
+                    description="Enter your GA4 ID (G-XXXX)"
+                />
+                <field 
+                    name="matomo_url" 
+                    type="text" 
+                    default="" 
+                    label="Matomo Server URL"
+                    hint="https://www.matomo.com"
+                    description="Enter the URL of your (self-hosted) matomo installation"
+                />
+                <field 
+                    name="matomo_id" 
+                    type="text" 
+                    default="" 
+                    label="Matomo Site ID"
+                    hint="1"
+                    description="Enter your Matomo Site ID"
+                />
+
+            </fieldset>
+        </fields>
+    </config>
+    <updateservers>
+        <server type="extension" priority="1" name="Joomill Tag Manager">https://raw.githubusercontent.com/Joomill/Tagmanager/master/update.xml</server>
+    </updateservers>
+</extension>
