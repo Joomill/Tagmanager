@@ -10,12 +10,15 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\CMSPlugin;
+
 /**
  * Joomill - Tag Manager plugin
  *
  * @since   1.0.0
  */
-class PlgSystemTagmanager extends JPlugin
+class PlgSystemTagmanager extends CMSPlugin
 {
 	/**
 	 * Application object.
@@ -59,7 +62,7 @@ class PlgSystemTagmanager extends JPlugin
 		{
             $gtm_id = $this->params->get('gtm_id');
 
-            $doc = JFactory::getDocument();
+            $doc = Factory::getDocument();
             $doc->addCustomTag('<link rel="preconnect" href="https://www.googletagmanager.com">');
             $doc->addCustomTag('<link rel="dns-prefetch" href="https://www.googletagmanager.com">');
 
