@@ -10,7 +10,6 @@
     <version>1.1.0</version>
     <description>Joomill Tag Manager - System plugin to track visitors with Google analytics, Google Tag Manager or Matomo</description>
     <scriptfile>script.php</scriptfile>
-
     <files>
         <filename plugin="tagmanager">tagmanager.php</filename>
     </files>
