@@ -7,7 +7,7 @@
     <license>GPLv3 http://www.gnu.org/licenses/gpl.html</license>
     <authorEmail>info@joomill.nl</authorEmail>
     <authorUrl>https://www.joomill.nl</authorUrl>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <description>Joomill Tag Manager - System plugin to track visitors with Google analytics, Google Tag Manager or Matomo</description>
     <scriptfile>script.php</scriptfile>
     <files>
@@ -50,6 +50,19 @@
                     description="Enter your Matomo Site ID"
                 />
 
+            </fieldset>
+            <fieldset name="advanced">
+                <field
+                        name="respectcookies"
+                        type="radio"
+                        class="btn-group"
+                        default="1"
+                        label="Respect Yootheme Cookiebanner"
+                        description="Don't track visitors when they don't accept cookies (_cookieAllowed != true)."
+                >
+                    <option value="0">JNO</option>
+                    <option value="1">JYES</option>
+                </field>
             </fieldset>
         </fields>
     </config>

@@ -57,6 +57,12 @@ class PlgSystemTagmanager extends CMSPlugin
 			return;
 		}
 
+        $cookie = $this->app->input->cookie->get('_cookieAllowed');
+        if ($this->params->get('respectcookies') && ($cookie != "true"))
+        {
+            return;
+        }
+
 		// Load GTM code
 		if ($this->params->get('gtm_id'))
 		{
