@@ -56,9 +56,9 @@
                         name="respectcookies"
                         type="radio"
                         class="btn-group"
-                        default="1"
+                        default="0"
                         label="Respect Yootheme Cookiebanner"
-                        description="Don't track visitors when they don't accept cookies (_cookieAllowed != true)."
+                        description="Don't track visitors when they don't accept cookies (_cookieAllowed != true). Keep disabled when you don't use the Yootheme Cookiebanner."
                 >
                     <option value="0">JNO</option>
                     <option value="1">JYES</option>
