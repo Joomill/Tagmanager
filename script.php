@@ -1,11 +1,10 @@
 <?php
-/**
- *  package: Joomill - Tag Manager
- *  copyright: Copyright (c) 2023. Jeroen Moolenschot | Joomill
- *  license: GNU General Public License version 3 or later
- *  link: https://www.joomill.nl
- **/
-
+/*
+ *  package: TagManager
+ *  copyright: Copyright (c) 2024. Jeroen Moolenschot | Joomill
+ *  license: GNU General Public License version 2 or later
+ *  link: https://www.joomill-extensions.com
+ */
 
 // No direct access to this file
 defined('_JEXEC') or die(); 

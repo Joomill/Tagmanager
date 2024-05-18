@@ -1,11 +1,10 @@
 <?php
-/**
- *  package: Joomill - Tag Manager
- *  copyright: Copyright (c) 2023. Jeroen Moolenschot | Joomill
- *  license: GNU General Public License version 3 or later
- *  link: https://www.joomill.nl
- **/
-
+/*
+ *  package: TagManager
+ *  copyright: Copyright (c) 2024. Jeroen Moolenschot | Joomill
+ *  license: GNU General Public License version 2 or later
+ *  link: https://www.joomill-extensions.com
+ */
 
 // No direct access to this file
 defined('_JEXEC') or die;
@@ -73,6 +72,27 @@ class PlgSystemTagmanager extends CMSPlugin
             $doc->addCustomTag('<link rel="dns-prefetch" href="https://www.googletagmanager.com">');
 
             // Google Tag Manager - party loaded in head
+			$consentScript = "
+            <script>
+            window.dataLayer = window.dataLayer || [];
+                function gtag() {
+                    dataLayer.push(arguments);
+                }
+                gtag(\"consent\", \"default\", {
+                    ad_storage: \"denied\",
+                    ad_user_data: \"denied\", 
+                    ad_personalization: \"denied\",
+                    analytics_storage: \"denied\",
+                    personalization_storage: \"denied\",
+					functionality_storage: \"granted\",
+                    security_storage: \"granted\",
+                    wait_for_update: 500,
+                });
+                gtag(\"set\", \"ads_data_redaction\", true);
+                gtag(\"set\", \"url_passthrough\", true);
+            </script>
+            ";
+
             $headScript = "
             <!-- Google Tag Manager -->
             <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -92,6 +112,7 @@ class PlgSystemTagmanager extends CMSPlugin
             ";
 
             $buffer     = $this->app->getBody();
+			$buffer     = preg_replace("/<head(\s[^>]*)?>/i", "<head\\1>\n" . $consentScript, $buffer);
             $buffer     = str_replace("</head>", $headScript . "</head>", $buffer);
             $buffer     = preg_replace("/<body(\s[^>]*)?>/i", "<body\\1>\n" . $bodyScript, $buffer);
             $this->app->setBody($buffer);
@@ -103,6 +124,25 @@ class PlgSystemTagmanager extends CMSPlugin
             $ga_id = $this->params->get('ga_id');
 
             $headScript = "
+            <script>
+            window.dataLayer = window.dataLayer || [];
+                function gtag() {
+                    dataLayer.push(arguments);
+                }
+                gtag(\"consent\", \"default\", {
+                    ad_storage: \"denied\",
+                    ad_user_data: \"denied\", 
+                    ad_personalization: \"denied\",
+                    analytics_storage: \"denied\",
+                    personalization_storage: \"denied\",
+					functionality_storage: \"granted\",
+                    security_storage: \"granted\",
+                    wait_for_update: 500,
+                });
+                gtag(\"set\", \"ads_data_redaction\", true);
+                gtag(\"set\", \"url_passthrough\", true);
+            </script>
+            
             <!-- Google tag (gtag.js) -->
               <script async src=\"https://www.googletagmanager.com/gtag/js?id=" . $ga_id . "\"></script>
               <script>
@@ -145,8 +185,38 @@ class PlgSystemTagmanager extends CMSPlugin
             ";
 
             $buffer     = $this->app->getBody();
-            $buffer     = str_replace("</head>", $headScript . "</head>", $buffer);
+            $buffer     = str_replace("</head>", $headScript . "\n</head>", $buffer);
             $this->app->setBody($buffer);
         }
+
+		// Load Custom Head code
+		if ($this->params->get('custom_head'))
+		{
+			$headScript = $this->params->get('custom_head');
+
+			$buffer     = $this->app->getBody();
+			$buffer     = str_replace("</head>", $headScript . "\n</head>", $buffer);
+			$this->app->setBody($buffer);
+		}
+
+		// Load Custom Body Begin code
+		if ($this->params->get('custom_body_start'))
+		{
+			$bodyScript = $this->params->get('custom_body_start');
+
+			$buffer     = $this->app->getBody();
+			$buffer     = preg_replace("/<body(\s[^>]*)?>/i", "<body\\1>\n" . $bodyScript, $buffer);
+			$this->app->setBody($buffer);
+		}
+
+		// Load Custom Body End code
+		if ($this->params->get('custom_body_end'))
+		{
+			$bodyScript = $this->params->get('custom_body_end');
+
+			$buffer     = $this->app->getBody();
+			$buffer     = str_replace("</body>", $bodyScript . "\n</body>", $buffer);
+			$this->app->setBody($buffer);
+		}
 	}
 }
