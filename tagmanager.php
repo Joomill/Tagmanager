@@ -71,27 +71,29 @@ class PlgSystemTagmanager extends CMSPlugin
             $doc->addCustomTag('<link rel="preconnect" href="https://www.googletagmanager.com">');
             $doc->addCustomTag('<link rel="dns-prefetch" href="https://www.googletagmanager.com">');
 
-            // Google Tag Manager - party loaded in head
-			$consentScript = "
-            <script>
-            window.dataLayer = window.dataLayer || [];
-                function gtag() {
-                    dataLayer.push(arguments);
-                }
-                gtag(\"consent\", \"default\", {
-                    ad_storage: \"denied\",
-                    ad_user_data: \"denied\", 
-                    ad_personalization: \"denied\",
-                    analytics_storage: \"denied\",
-                    personalization_storage: \"denied\",
-					functionality_storage: \"granted\",
-                    security_storage: \"granted\",
-                    wait_for_update: 500,
-                });
-                gtag(\"set\", \"ads_data_redaction\", true);
-                gtag(\"set\", \"url_passthrough\", true);
-            </script>
-            ";
+			if ($this->params->get('consent')) {
+				// Google Tag Manager - party loaded in head
+				$consentScript = "
+				<script>
+				window.dataLayer = window.dataLayer || [];
+					function gtag() {
+						dataLayer.push(arguments);
+					}
+					gtag(\"consent\", \"default\", {
+						ad_storage: \"denied\",
+						ad_user_data: \"denied\", 
+						ad_personalization: \"denied\",
+						analytics_storage: \"denied\",
+						personalization_storage: \"denied\",
+						functionality_storage: \"granted\",
+						security_storage: \"granted\",
+						wait_for_update: 500,
+					});
+					gtag(\"set\", \"ads_data_redaction\", true);
+					gtag(\"set\", \"url_passthrough\", true);
+				</script>
+				";
+			}
 
             $headScript = "
             <!-- Google Tag Manager -->
@@ -112,7 +114,9 @@ class PlgSystemTagmanager extends CMSPlugin
             ";
 
             $buffer     = $this->app->getBody();
-			$buffer     = preg_replace("/<head(\s[^>]*)?>/i", "<head\\1>\n" . $consentScript, $buffer);
+			if ($this->params->get('consent')) {
+				$buffer     = preg_replace("/<head(\s[^>]*)?>/i", "<head\\1>\n" . $consentScript, $buffer);
+				}
             $buffer     = str_replace("</head>", $headScript . "</head>", $buffer);
             $buffer     = preg_replace("/<body(\s[^>]*)?>/i", "<body\\1>\n" . $bodyScript, $buffer);
             $this->app->setBody($buffer);
@@ -123,36 +127,50 @@ class PlgSystemTagmanager extends CMSPlugin
         {
             $ga_id = $this->params->get('ga_id');
 
-            $headScript = "
-            <script>
-            window.dataLayer = window.dataLayer || [];
-                function gtag() {
-                    dataLayer.push(arguments);
-                }
-                gtag(\"consent\", \"default\", {
-                    ad_storage: \"denied\",
-                    ad_user_data: \"denied\", 
-                    ad_personalization: \"denied\",
-                    analytics_storage: \"denied\",
-                    personalization_storage: \"denied\",
-					functionality_storage: \"granted\",
-                    security_storage: \"granted\",
-                    wait_for_update: 500,
-                });
-                gtag(\"set\", \"ads_data_redaction\", true);
-                gtag(\"set\", \"url_passthrough\", true);
-            </script>
-            
-            <!-- Google tag (gtag.js) -->
-              <script async src=\"https://www.googletagmanager.com/gtag/js?id=" . $ga_id . "\"></script>
-              <script>
-                    window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-            
-                gtag('config', '$ga_id' );
-              </script>
-            ";
+			if ($this->params->get('consent')) {
+				$headScript = "
+				<script>
+				window.dataLayer = window.dataLayer || [];
+					function gtag() {
+						dataLayer.push(arguments);
+					}
+					gtag(\"consent\", \"default\", {
+						ad_storage: \"denied\",
+						ad_user_data: \"denied\", 
+						ad_personalization: \"denied\",
+						analytics_storage: \"denied\",
+						personalization_storage: \"denied\",
+						functionality_storage: \"granted\",
+						security_storage: \"granted\",
+						wait_for_update: 500,
+					});
+					gtag(\"set\", \"ads_data_redaction\", true);
+					gtag(\"set\", \"url_passthrough\", true);
+				</script>
+				
+				<!-- Google tag (gtag.js) -->
+				  <script async src=\"https://www.googletagmanager.com/gtag/js?id=" . $ga_id . "\"></script>
+				  <script>
+						window.dataLayer = window.dataLayer || [];
+					function gtag(){dataLayer.push(arguments);}
+					gtag('js', new Date());
+				
+					gtag('config', '$ga_id' );
+				  </script>
+				";
+			} else {
+				$headScript = "				
+				<!-- Google tag (gtag.js) -->
+				  <script async src=\"https://www.googletagmanager.com/gtag/js?id=" . $ga_id . "\"></script>
+				  <script>
+						window.dataLayer = window.dataLayer || [];
+					function gtag(){dataLayer.push(arguments);}
+					gtag('js', new Date());
+				
+					gtag('config', '$ga_id' );
+				  </script>
+				";
+			}
 
             $buffer     = $this->app->getBody();
             $buffer     = preg_replace("/<head(\s[^>]*)?>/i", "<head\\1>\n" . $headScript, $buffer);
